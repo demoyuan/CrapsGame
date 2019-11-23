@@ -7,7 +7,7 @@ export default class Player extends cc.Component {
 
   private mapLength: number = 0 // 地图长度
   private jumpHeight: number = 40 // 跳跃高度
-  private jumpTime: number = 0.2 // 跳跃时间
+  private jumpTime: number = 0.5 // 跳跃时间
   private playerPos: number = 1 // 玩家格子位置
 
   public init({ mapNum }) {
@@ -31,9 +31,11 @@ export default class Player extends cc.Component {
     for (let i = 1; i <= mapNum; i++) {
       setTimeout(() => {
         this.playerPos += 1
+        if (this.playerPos > this.mapLength) {
+          this.playerPos = 1
+        }
         let pos = this.getPlayerPos(this.playerPos)
-        console.log(pos)
-        // this.node.runAction(this.jumpFnc(pos))
+        this.node.runAction(this.jumpFnc(pos))
       }, i * 1000)
     }
   }
@@ -42,8 +44,9 @@ export default class Player extends cc.Component {
    * 跳跃动画
    */
   public jumpFnc(pos: any) {
-    let jumpUp = cc.moveBy(this.jumpTime, cc.v2(-pos.x / 2, pos.y + this.jumpHeight)).easing(cc.easeCubicActionOut())
-    let jumpDown = cc.moveBy(this.jumpTime, cc.v2(-pos.x, - pos.y)).easing(cc.easeCubicActionIn())
+    let nowY = this.node.y
+    let jumpUp = cc.moveTo(this.jumpTime, cc.v2(pos.x / 2, nowY + this.jumpHeight)).easing(cc.easeCubicActionOut())
+    let jumpDown = cc.moveTo(this.jumpTime, cc.v2(pos.x, pos.y)).easing(cc.easeCubicActionIn())
     return cc.sequence(jumpUp, jumpDown)
   }
 }
