@@ -6,8 +6,8 @@ export default class Player extends cc.Component {
   public mapList: cc.Node = null
 
   private mapLength: number = 0 // 地图长度
-  private jumpHeight: number = 120 // 跳跃高度
-  private jumpTime: number = 0.4 // 跳跃时间
+  private jumpHeight: number = 40 // 跳跃高度
+  private jumpTime: number = 0.2 // 跳跃时间
   private playerPos: number = 1 // 玩家格子位置
 
   public init({ mapNum }) {
@@ -32,7 +32,8 @@ export default class Player extends cc.Component {
       setTimeout(() => {
         this.playerPos += 1
         let pos = this.getPlayerPos(this.playerPos)
-        this.node.runAction(this.jumpFnc(pos))
+        console.log(pos)
+        // this.node.runAction(this.jumpFnc(pos))
       }, i * 1000)
     }
   }
