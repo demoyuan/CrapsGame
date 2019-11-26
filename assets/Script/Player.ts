@@ -2,7 +2,7 @@ const { ccclass, property } = cc._decorator
 
 @ccclass
 export default class Player extends cc.Component {
-  private jumpHeight: number = 100 // 跳跃高度
+  private jumpHeight: number = 60 // 跳跃高度
   private jumpTime: number = 0.6 // 跳跃时间
 
   /**

@@ -4,7 +4,7 @@ const { ccclass, property } = cc._decorator
 export default class Game extends cc.Component {
   @property({ type: cc.ScrollView, tooltip: '地图' })
   public scrollMap: cc.ScrollView = null
-  
+
   @property({ type: cc.Sprite, tooltip: '玩家' })
   private player: cc.Sprite = null
 
@@ -45,7 +45,7 @@ export default class Game extends cc.Component {
    */
   public play() {
     let num = this.diceComp.onThrow()
-    if (num !== 0 ) {
+    if (num !== 0) {
       let arr = this.getPlayPosArr(num)
       this.runJump(arr)
     }
@@ -85,11 +85,17 @@ export default class Game extends cc.Component {
   public mapCenter(pos: any) {
     let mapW = this.scrollMap.content.width
     let mapH = this.scrollMap.content.height
-    let xPercent = Math.round((mapW / 2 + pos.x) / mapW * 100) / 100
-    let yPercent = Math.round((mapH / 2 - pos.y) / mapH * 100) / 100
+    let scrollW = this.scrollMap.node.width
+    let scrollH = this.scrollMap.node.height
+    let xPercent = this.getPercent((scrollW + pos.x) / (mapW - scrollW))
+    let yPercent = this.getPercent(1 + pos.y / (mapH - scrollH))
     // 停止自动滚动
     this.scrollMap.stopAutoScroll()
     this.scrollMap.scrollTo(cc.v2(xPercent, yPercent), 3.6)
+  }
+
+  public getPercent(num: number): number {
+    return Math.round(num * 100) / 100
   }
 
   /**
@@ -107,5 +113,9 @@ export default class Game extends cc.Component {
       arr = [...arr, this.playerComp.jumpFnc(pos), this.mapCenter(pos)]
     }
     return arr
+  }
+
+  public loadPackListPage() {
+    cc.director.loadScene('backpack')
   }
 }
