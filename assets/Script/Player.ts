@@ -6,7 +6,7 @@ export default class Player extends cc.Component {
   private jumpTime: number = 0.6 // 跳跃时间
 
   /**
-   * 跳跃动画
+   * 跳跃方法
    */
   public jumpFnc(pos: any) {
     let jumpAnimate = cc.jumpTo(this.jumpTime, cc.v2(pos.x, pos.y), this.jumpHeight, 1)
