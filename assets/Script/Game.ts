@@ -1,4 +1,5 @@
 const { ccclass, property } = cc._decorator
+import httpRequest from './HttpRequest'
 
 @ccclass
 export default class Game extends cc.Component {
@@ -33,15 +34,13 @@ export default class Game extends cc.Component {
   }
 
   public getUserData() {
-    let xhr = new XMLHttpRequest()
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 400)) {
-        var response = xhr.responseText
-        console.log(response)
+    let ajax = new httpRequest()
+    ajax.httpGet({
+      url: '/cfg/whoot/whootserv_dev',
+      callback: (res: any) => {
+        cc.log(res)
       }
-    }
-    xhr.open('GET', 'https://service.ingcreations.com/cfg/whoot/whootserv_dev', true)
-    xhr.send()
+    })
   }
 
   /**
