@@ -12,6 +12,9 @@ export default class Game extends cc.Component {
   @property({ type: cc.Node, tooltip: '骰子' })
   private dice: cc.Node = null
 
+  @property({ type: cc.Node, tooltip: '中奖弹窗' })
+  private winAlert: cc.Node = null
+
   private MapComp: any = null
   private playerComp: any = null
   private diceComp: any = null
@@ -68,6 +71,9 @@ export default class Game extends cc.Component {
         ...arr,
         cc.callFunc(() => {
           this.diceComp.buttonDisabled = false
+          this.winAlert.runAction(cc.fadeIn(1.0))
+          this.winAlert.active = true
+          cc.log(this.winAlert)
         })
       )
     )
