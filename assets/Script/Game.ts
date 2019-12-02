@@ -18,30 +18,43 @@ export default class Game extends cc.Component {
   private MapComp: any = null
   private playerComp: any = null
   private diceComp: any = null
+  private winAlertComp: any = null
 
   /** 玩家格子位置 */
   public playerPos: number = 1
+  /** 剩余游戏次数 */
+  public times: number = 0
+  /** 是否每日首次登陆 */
+  public firstLogin: boolean = false
+  /** 当天获得游戏次数 */
+  public getTimes: number = 0
 
   protected onLoad() {
     this.MapComp = this.scrollMap.getComponent('MapEvent')
     this.playerComp = this.player.getComponent('Player')
     this.diceComp = this.dice.getComponent('Dice')
+    this.winAlertComp = this.winAlert.getComponent('Alert')
     this.initGame()
   }
 
   private initGame() {
     this.getUserData()
-    // 初始化玩家位置
-    this.player.node.position = this.MapComp.getGridPos(this.playerPos)
-    this.MapComp.mapCenter(this.player.node.position)
   }
 
   public getUserData() {
     let ajax = new httpRequest()
-    ajax.httpGet({
-      url: '/cfg/whoot/whootserv_dev',
+    ajax.httpPost({
+      url: '/user/game/initGame',
       callback: (res: any) => {
-        cc.log(res)
+        if (res.code === 0) {
+          this.playerPos = res.data.location
+          this.times = res.data.amountChance
+          this.firstLogin = res.data.daily === 1 ? true : false
+          this.getTimes = res.data.redeemChance
+        }
+        // 初始化玩家位置
+        this.player.node.position = this.MapComp.getGridPos(this.playerPos)
+        this.MapComp.mapCenter(this.player.node.position)
       }
     })
   }
@@ -70,10 +83,8 @@ export default class Game extends cc.Component {
         }),
         ...arr,
         cc.callFunc(() => {
+          this.winAlertComp.openTips()
           this.diceComp.buttonDisabled = false
-          this.winAlert.runAction(cc.fadeIn(1.0))
-          this.winAlert.active = true
-          cc.log(this.winAlert)
         })
       )
     )
@@ -83,7 +94,8 @@ export default class Game extends cc.Component {
    * 我的奖品页面
    */
   public loadDescPage() {
-    cc.director.loadScene('desc')
+    window.location.href = 'http://www.baidu.com'
+    // cc.director.loadScene('desc')
   }
 
   /**
