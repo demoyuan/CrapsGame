@@ -60,7 +60,8 @@ export default class MapEvent extends cc.Component {
     let scrollH = this.scrollMap.node.height // 1344
     let xPercent = this.getPercent((scrollW + pos.x) / (mapW - scrollW))
     // let yPercent = this.getPercent(1 + pos.y / (mapH - scrollH))
-    let yPercent = this.getPercent((scrollH + pos.y) / (mapH - scrollH) - 0.3)
+    let hDifference = scrollH / 1000 - 1
+    let yPercent = this.getPercent((scrollH + pos.y) / (mapH - scrollH) - hDifference)
     // 停止自动滚动
     this.scrollMap.stopAutoScroll()
     this.scrollMap.scrollTo(cc.v2(xPercent, yPercent), 3.6)
@@ -90,5 +91,25 @@ export default class MapEvent extends cc.Component {
       }
     }
     return { arr, nowPlayerPos }
+  }
+
+  /**
+   * 检查是否中奖
+   */
+  public checkWin(type: number) {
+    switch (type) {
+      case 0: // 无奖励
+        return { win: false, gift: null }
+      case 1: // 再来一次
+        return { win: true, gift: 'times' }
+      case 101: // 一等奖
+        return { win: true, gift: 'one' }
+      case 102: // 二等奖
+        return { win: true, gift: 'two' }
+      case 103: // 三等奖
+        return { win: true, gift: 'three' }
+      case 104: // 特别奖
+        return { win: true, gift: 'sp' }
+    }
   }
 }

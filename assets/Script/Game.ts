@@ -15,46 +15,79 @@ export default class Game extends cc.Component {
   @property({ type: cc.Node, tooltip: '中奖弹窗' })
   private winAlert: cc.Node = null
 
-  private MapComp: any = null
+  @property({ type: cc.Node, tooltip: '获取游戏次数弹窗' })
+  private timesAlert: cc.Node = null
+
+  @property({ type: cc.Node, tooltip: 'Tips' })
+  private tips: cc.Node = null
+
+  private mapComp: any = null
   private playerComp: any = null
   private diceComp: any = null
   private winAlertComp: any = null
+  private timesAlertComp: any = null
+  private tipsComp: any = null
+  private ajax = new httpRequest()
 
   /** 玩家格子位置 */
   public playerPos: number = 1
-  /** 剩余游戏次数 */
-  public times: number = 0
-  /** 是否每日首次登陆 */
-  public firstLogin: boolean = false
-  /** 当天获得游戏次数 */
-  public getTimes: number = 0
 
   protected onLoad() {
-    this.MapComp = this.scrollMap.getComponent('MapEvent')
+    this.mapComp = this.scrollMap.getComponent('MapEvent')
     this.playerComp = this.player.getComponent('Player')
     this.diceComp = this.dice.getComponent('Dice')
     this.winAlertComp = this.winAlert.getComponent('Alert')
+    this.timesAlertComp = this.timesAlert.getComponent('TimesAlert')
+    this.tipsComp = this.tips.getComponent('Tips')
     this.initGame()
   }
 
   private initGame() {
+    this.player.node.position = this.mapComp.getGridPos(this.playerPos)
+    this.initUserToken()
     this.getUserData()
   }
 
+  /**
+   * 获取用户登录Token
+   */
+  public initUserToken() {
+    // @ts-ignore
+    if (window.MessageSignal) {
+      // @ts-ignore
+      cc.log('android: ', window.MessageSignal.onMonopoly)
+      // @ts-ignore
+      cc.log('android: ', window.onMonopoly)
+    }
+    // @ts-ignore
+    if (window.webkit && window.webkit.messageHandlers) {
+      // @ts-ignore
+      window.webkit.messageHandlers.getUserDataForIos.postMessage({ title: '' })
+      // @ts-ignore
+      window.getUserDataForIos = (res: any) => {
+        let userInfo = JSON.parse(res)
+        this.ajax.userToken = userInfo.token
+        cc.log('IOS user token: ', userInfo.token)
+      }
+    }
+    this.ajax.userToken = 'e4f55ec453e94a62843682ec95f79271' // 75
+  }
+
   public getUserData() {
-    let ajax = new httpRequest()
-    ajax.httpPost({
+    this.tipsComp.showLoading({ status: true })
+    this.ajax.httpPost({
       url: '/user/game/initGame',
       callback: (res: any) => {
+        this.tipsComp.showLoading({ status: false })
         if (res.code === 0) {
-          this.playerPos = res.data.location
-          this.times = res.data.amountChance
-          this.firstLogin = res.data.daily === 1 ? true : false
-          this.getTimes = res.data.redeemChance
+          this.playerPos = res.data.location || (res.data.step + 1)
+          this.diceComp.times = res.data.amountChance
+          this.timesAlertComp.firstLogin = res.data.daily === 1 ? true : false
+          this.timesAlertComp.getTimes = res.data.redeemChance
         }
         // 初始化玩家位置
-        this.player.node.position = this.MapComp.getGridPos(this.playerPos)
-        this.MapComp.mapCenter(this.player.node.position)
+        this.player.node.position = this.mapComp.getGridPos(this.playerPos)
+        this.mapComp.mapCenter(this.player.node.position)
       }
     })
   }
@@ -65,9 +98,27 @@ export default class Game extends cc.Component {
   public play() {
     let num = this.diceComp.onThrow()
     if (num !== 0) {
-      let { arr, nowPlayerPos } = this.MapComp.getPlayPosArr(num, this.playerPos)
-      this.playerPos = nowPlayerPos
-      this.runJump(arr)
+      // test
+      // let { arr, nowPlayerPos } = this.mapComp.getPlayPosArr(num, this.playerPos)
+      // this.playerPos = nowPlayerPos
+      // this.runJump(arr, 0)
+      // this.winAlertComp.openTips()
+
+      this.tipsComp.showLoading({ status: true })
+      this.ajax.httpPost({
+        url: '/user/game/playGame',
+        callback: (res: any) => {
+          this.tipsComp.showLoading({ status: false })
+          if (res.code === 0) {
+            let { arr, nowPlayerPos } = this.mapComp.getPlayPosArr(num, this.playerPos)
+            this.playerPos = nowPlayerPos
+            this.diceComp.times = this.diceComp.times - num
+            this.runJump(arr, res.data.rewardType)
+          } else {
+            this.tipsComp.showMessage({ text: res.message })
+          }
+        }
+      })
     }
   }
 
@@ -75,7 +126,7 @@ export default class Game extends cc.Component {
    * 执行跳格子动画
    * @param arr 动画数组[cc.jumpTo]
    */
-  public runJump(arr: any) {
+  public runJump(arr: any, winType: number) {
     this.player.node.runAction(
       cc.sequence(
         cc.callFunc(() => {
@@ -83,7 +134,8 @@ export default class Game extends cc.Component {
         }),
         ...arr,
         cc.callFunc(() => {
-          this.winAlertComp.openTips()
+          let { win, gift } = this.mapComp.checkWin(winType)
+          win && this.winAlertComp.openTips(gift)
           this.diceComp.buttonDisabled = false
         })
       )
@@ -103,5 +155,12 @@ export default class Game extends cc.Component {
    */
   public loadPackListPage() {
     cc.director.loadScene('backpack')
+  }
+
+  /**
+   * 打开获取次数提示窗口
+   */
+  public openTimesAlert() {
+    this.timesAlertComp.openTips()
   }
 }

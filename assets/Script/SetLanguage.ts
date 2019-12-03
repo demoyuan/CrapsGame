@@ -24,7 +24,6 @@ export default class SetLanguage extends cc.Component {
       if (/\$t\- */g.test(item.name)) {
         let key = item.name.replace(/<Label>/, '').replace(/\$t-/, '')
         if (lang[key]) {
-          // cc.log(key)
           item.string = lang[key]
         }
       }

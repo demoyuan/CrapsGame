@@ -4,6 +4,7 @@ const { ccclass, property } = cc._decorator
 export default class HttpRequest extends cc.Component {
   // private baseUrl: string = 'https://service.ingcreations.com'
   private baseUrl: string = 'http://172.16.47.75:8888/whoot/whoot-local'
+  public userToken: string = ''
 
   public sendXhr(type: string, url: string, callback: any, dataStr?: string) {
     let xhr = cc.loader.getXMLHttpRequest()
@@ -21,7 +22,7 @@ export default class HttpRequest extends cc.Component {
       xhr.send()
     } else {
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-      xhr.setRequestHeader('whoot_token', 'd0bd30b97d9546a0934ab0f3202ca2cd') // 65976
+      xhr.setRequestHeader('whoot_token', this.userToken)
       xhr.send(dataStr)
     }
   }

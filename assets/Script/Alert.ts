@@ -2,12 +2,19 @@ const { ccclass, property } = cc._decorator
 
 @ccclass
 export default class Alert extends cc.Component {
-  @property({ type: cc.Node, tooltip: '弹窗内容' })
   public box: cc.Node = null
+  public fire: cc.Node = null
 
   protected onLoad() {
-    this.node.active = false
+    this.box = this.node.getChildByName('Box')
+    this.fire = this.node.getChildByName('Fireworks')
+    this.init()
+    let repeat = cc.repeatForever(cc.rotateBy(1.0, 90))
+    this.fire.runAction(repeat)
+  }
 
+  public init() {
+    this.node.active = false
     // 弹窗初始位置居中
     let alertWidget = this.getComponent(cc.Widget)
     alertWidget.left = 0
@@ -21,7 +28,7 @@ export default class Alert extends cc.Component {
     graphics.fill()
   }
 
-  public openTips() {
+  public openTips(gift?: any) {
     this.node.active = true
     this.node.runAction(cc.fadeIn(0.4))
   }
