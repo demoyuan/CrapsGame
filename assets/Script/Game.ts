@@ -36,7 +36,7 @@ export default class Game extends cc.Component {
     this.mapComp = this.scrollMap.getComponent('MapEvent')
     this.playerComp = this.player.getComponent('Player')
     this.diceComp = this.dice.getComponent('Dice')
-    this.winAlertComp = this.winAlert.getComponent('Alert')
+    this.winAlertComp = this.winAlert.getComponent('WinAlert')
     this.timesAlertComp = this.timesAlert.getComponent('TimesAlert')
     this.tipsComp = this.tips.getComponent('Tips')
     this.initGame()
@@ -52,6 +52,7 @@ export default class Game extends cc.Component {
    * 获取用户登录Token
    */
   public initUserToken() {
+    let token = ''
     // @ts-ignore
     if (window.MessageSignal) {
       // @ts-ignore
@@ -66,11 +67,14 @@ export default class Game extends cc.Component {
       // @ts-ignore
       window.getUserDataForIos = (res: any) => {
         let userInfo = JSON.parse(res)
-        this.ajax.userToken = userInfo.token
+        token = userInfo.token
         cc.log('IOS user token: ', userInfo.token)
       }
     }
-    this.ajax.userToken = 'e4f55ec453e94a62843682ec95f79271' // 75
+    // token = 'e4f55ec453e94a62843682ec95f79271' // 75
+    token = '0bcdf588f68e4bf7b50dbce27d492a3e' // qc
+
+    cc.sys.localStorage.setItem('userData', JSON.stringify({ token }))
   }
 
   public getUserData() {
@@ -99,10 +103,7 @@ export default class Game extends cc.Component {
     let num = this.diceComp.onThrow()
     if (num !== 0) {
       // test
-      // let { arr, nowPlayerPos } = this.mapComp.getPlayPosArr(num, this.playerPos)
-      // this.playerPos = nowPlayerPos
-      // this.runJump(arr, 0)
-      // this.winAlertComp.openTips()
+      // this.playSucFnc(num, 1)
 
       this.tipsComp.showLoading({ status: true })
       this.ajax.httpPost({
@@ -110,16 +111,20 @@ export default class Game extends cc.Component {
         callback: (res: any) => {
           this.tipsComp.showLoading({ status: false })
           if (res.code === 0) {
-            let { arr, nowPlayerPos } = this.mapComp.getPlayPosArr(num, this.playerPos)
-            this.playerPos = nowPlayerPos
-            this.diceComp.times = this.diceComp.times - num
-            this.runJump(arr, res.data.rewardType)
+            this.playSucFnc(num, res.data.rewardType)
           } else {
             this.tipsComp.showMessage({ text: res.message })
           }
         }
       })
     }
+  }
+
+  public playSucFnc(num: number, winType: number) {
+    let { arr, nowPlayerPos } = this.mapComp.getPlayPosArr(num, this.playerPos)
+    this.playerPos = nowPlayerPos
+    this.diceComp.times = this.diceComp.times - num
+    this.runJump(arr, winType)
   }
 
   /**
@@ -140,27 +145,5 @@ export default class Game extends cc.Component {
         })
       )
     )
-  }
-
-  /**
-   * 我的奖品页面
-   */
-  public loadDescPage() {
-    window.location.href = 'http://www.baidu.com'
-    // cc.director.loadScene('desc')
-  }
-
-  /**
-   * 我的奖品页面
-   */
-  public loadPackListPage() {
-    cc.director.loadScene('backpack')
-  }
-
-  /**
-   * 打开获取次数提示窗口
-   */
-  public openTimesAlert() {
-    this.timesAlertComp.openTips()
   }
 }

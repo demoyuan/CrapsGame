@@ -99,17 +99,23 @@ export default class MapEvent extends cc.Component {
   public checkWin(type: number) {
     switch (type) {
       case 0: // 无奖励
-        return { win: false, gift: null }
+        return { win: false, gift: 0 }
       case 1: // 再来一次
         return { win: true, gift: 'times' }
-      case 101: // 一等奖
-        return { win: true, gift: 'one' }
-      case 102: // 二等奖
-        return { win: true, gift: 'two' }
-      case 103: // 三等奖
-        return { win: true, gift: 'three' }
-      case 104: // 特别奖
-        return { win: true, gift: 'sp' }
+      case 101: // 大贏家1號獎
+        return { win: true, gift: 1 }
+      case 102: // 大贏家2號獎
+        return { win: true, gift: 2 }
+      case 103: // 大贏家3號獎
+        return { win: true, gift: 3 }
+      case 104: // 大贏家4號獎
+        return { win: true, gift: 4 }
+      case 105: // 大贏家5號獎
+        return { win: true, gift: 5 }
+      case 106: // 大贏家6號獎
+        return { win: true, gift: 6 }
+      default:
+        return { win: false, gift: 0 }
     }
   }
 }

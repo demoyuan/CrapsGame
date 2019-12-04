@@ -2,12 +2,24 @@ const { ccclass, property } = cc._decorator
 
 @ccclass
 export default class HttpRequest extends cc.Component {
-  // private baseUrl: string = 'https://service.ingcreations.com'
-  private baseUrl: string = 'http://172.16.47.75:8888/whoot/whoot-local'
-  public userToken: string = ''
+  private baseDev: string = 'http://172.16.47.75:8888/whoot/whoot-local'
+  private baseQc: string = 'https://qc-k8s.ingcreations.com/gw/whoot-local'
+  private baseRelease: string = 'https://test.whoot.com/api'
 
   public sendXhr(type: string, url: string, callback: any, dataStr?: string) {
     let xhr = cc.loader.getXMLHttpRequest()
+    switch (window.location.host) {
+      case 'qc.whoot.com':
+        url = this.baseQc + url
+        break
+      case 'hk.whoot.com':
+        url = this.baseRelease + url
+        break
+      default:
+        // url = this.baseDev + url
+        url = this.baseQc + url
+    }
+
     xhr.open(type, url, true)
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
@@ -17,12 +29,13 @@ export default class HttpRequest extends cc.Component {
         }
       }
     }
+    let userData = JSON.parse(cc.sys.localStorage.getItem('userData'))
+    xhr.setRequestHeader('whoot_token', userData.token)
     if (type === 'GET') {
       xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8')
       xhr.send()
     } else {
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-      xhr.setRequestHeader('whoot_token', this.userToken)
       xhr.send(dataStr)
     }
   }
@@ -42,13 +55,11 @@ export default class HttpRequest extends cc.Component {
 
   public httpGet({ url, params, callback }: { url: string, params?: object, callback: any }) {
     let dataStr = this.formatParams(params)
-    url = this.baseUrl + `${url}?${dataStr}`
-    this.sendXhr('GET', url, callback)
+    this.sendXhr('GET', `${url}?${dataStr}`, callback)
   }
 
   public httpPost({ url, params, callback }: { url: string, params?: object, callback: any }) {
     let dataStr = this.formatParams(params)
-    url = this.baseUrl + url
     this.sendXhr('POST', url, callback, dataStr)
   }
 }

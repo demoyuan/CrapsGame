@@ -58,4 +58,8 @@ export default class TimesAlert extends cc.Component {
       })
     ))
   }
+
+  public openAppCommentPage() {
+    alert(JSON.stringify({ touchPos: 'Comment' }))
+  }
 }

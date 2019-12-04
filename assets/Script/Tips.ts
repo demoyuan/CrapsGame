@@ -47,7 +47,7 @@ export default class Tips extends cc.Component {
    */
   public changeNodeSize(text: string) {
     let fSize = this.tipsText.fontSize
-    let fLength = text.length
+    let fLength = this.fontLength(text)
     let w = fSize * fLength
     let h = 1
     if (w > 600) {
@@ -57,5 +57,17 @@ export default class Tips extends cc.Component {
     this.node.width = w
     this.node.height = h * 60
     this.tipsText.node.width = this.node.width - 80
+  }
+
+  /**
+   * 获取字符长度
+   */
+  public fontLength(str: string) {
+    let len = 0
+    let formatStr = str.trim()
+    for (let font of formatStr) {
+      font.charCodeAt(0) > 255 ? (len += 2) : len++
+    }
+    return len
   }
 }
