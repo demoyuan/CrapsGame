@@ -6,6 +6,9 @@ export default class Dice extends cc.Component {
   @property({ type: cc.Node, tooltip: '背景' })
   public bg: cc.Node = null
 
+  @property({ type: cc.Label, tooltip: '剩余次数' })
+  public timesLabel: cc.Label = null
+
   /** 剩余游戏次数 */
   public times: number = 0
   /** 点击冷却 防止重复点击 */
@@ -18,6 +21,7 @@ export default class Dice extends cc.Component {
   }
 
   protected update() {
+    this.timesLabel.string = `x${this.times}`
     this.times === 0 ? this.disOnClick() : this.enOnClick()
   }
 
@@ -43,7 +47,7 @@ export default class Dice extends cc.Component {
    */
   public onThrow(): number {
     this.node.runAction(cc.sequence(
-      cc.scaleTo(0.1, 0.8, 0.8),
+      cc.scaleTo(0.1, 0.92, 0.92),
       cc.scaleTo(0.1, 1, 1)
     ))
     return this.buttonDisabled ? 0 : 1

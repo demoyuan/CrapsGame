@@ -5,10 +5,9 @@ export default class TimesAlert extends cc.Component {
   @property({ type: cc.Label, tooltip: '评论完成次数' })
   public commentLabel: cc.Label = null
 
-  @property({ type: cc.Label, tooltip: '登录完成次数' })
-  public loginLabel: cc.Label = null
-
   public box: cc.Node = null
+  public completionsNode: cc.Node = null
+  public finishNode: cc.Node = null
 
   /** 是否每日首次登陆 */
   public firstLogin: boolean = false
@@ -18,6 +17,13 @@ export default class TimesAlert extends cc.Component {
   protected onLoad() {
     this.box = this.node.getChildByName('Box')
     this.init()
+  }
+  protected start() {
+    let Item1Node = this.box.getChildByName('Item1')
+    this.completionsNode = Item1Node.getChildByName('completions')
+    this.finishNode = Item1Node.getChildByName('finish')
+    this.finishNode.active = this.getTimes === 3
+    this.completionsNode.active = this.getTimes !== 3
   }
 
   public init() {
@@ -37,7 +43,6 @@ export default class TimesAlert extends cc.Component {
 
   public openTips() {
     this.commentLabel.string = `${this.getTimes}/3`
-    this.loginLabel.string = `${this.firstLogin ? 1 : 0}/1`
     this.node.active = true
     this.node.runAction(cc.sequence(
       cc.fadeIn(0.1),

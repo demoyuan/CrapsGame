@@ -52,14 +52,9 @@ export default class Game extends cc.Component {
    * 获取用户登录Token
    */
   public initUserToken() {
-    let token = ''
-    // @ts-ignore
-    if (window.MessageSignal) {
-      // @ts-ignore
-      cc.log('android: ', window.MessageSignal.onMonopoly)
-      // @ts-ignore
-      cc.log('android: ', window.onMonopoly)
-    }
+    let url = new URL(window.location.href)
+    let token = url.searchParams.get('token')
+    // window.location.href = window.location.href + '&token2=asdasd'
     // @ts-ignore
     if (window.webkit && window.webkit.messageHandlers) {
       // @ts-ignore
@@ -71,9 +66,6 @@ export default class Game extends cc.Component {
         cc.log('IOS user token: ', userInfo.token)
       }
     }
-    // token = 'e4f55ec453e94a62843682ec95f79271' // 75
-    token = '0bcdf588f68e4bf7b50dbce27d492a3e' // qc
-
     cc.sys.localStorage.setItem('userData', JSON.stringify({ token }))
   }
 

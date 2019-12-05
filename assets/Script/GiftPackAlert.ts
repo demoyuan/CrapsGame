@@ -37,6 +37,7 @@ export default class GiftPackAlert extends cc.Component {
     this.changeGiftImage(newGift, test3)
     this.changeGiftShopName(newGift, 'aaaa123')
     this.changeGiftTime(newGift, { startTm: data.startTm, endTm: data.endTm })
+    this.changeGiftBtn(newGift, data)
     this.content.addChild(newGift)
   }
 
@@ -48,7 +49,16 @@ export default class GiftPackAlert extends cc.Component {
     // 加载远程图片
     cc.loader.load({ url, type: 'jpg' }, (err: any, texture: any) => {
       if (!err) {
+        let originImg = new cc.SpriteFrame(texture)
+        let imgSize = originImg.getOriginalSize()
         imgSprite.spriteFrame = new cc.SpriteFrame(texture)
+        // 居中裁剪
+        imgSprite.spriteFrame.setRect(cc.rect(
+          imgSize.width / 2 - imgSprite.node.width / 2,
+          imgSize.height / 2 - imgSprite.node.height / 2,
+          imgSprite.node.width,
+          imgSprite.node.height
+        ))
       }
     })
     // 加载本地图片
@@ -73,50 +83,48 @@ export default class GiftPackAlert extends cc.Component {
     label.string = `有效期：${time.startTm}-${time.endTm}`
   }
 
+  /**
+   * 跳转app门店页面
+   */
+  public changeGiftBtn(giftNode: cc.Node, data: any) {
+    let btn = giftNode.getChildByName('btn').getComponent(cc.Button)
+    let clickEventHandler = new cc.Component.EventHandler()
+    clickEventHandler.target = this.node
+    clickEventHandler.component = 'GiftPackAlert'
+    clickEventHandler.handler = 'goAppShopInfo'
+    clickEventHandler.customEventData = data
+    btn.clickEvents.push(clickEventHandler)
+  }
+
+  public goAppShopInfo(event: any, customEventData: any) {
+    alert(JSON.stringify({ touchPos: 'ShopInfo', ...customEventData }))
+  }
+
   public loadGiftList() {
     this.ajax.httpGet({
       url: '/user/coupon/list',
       callback: (res: any) => {
         if (res.code === 0) {
-          res.data.coupons.map((item: any) => {
-            if (item.tokenFrom >= 101 && item.tokenFrom <= 106) {
-              let obj = {
-                id: item.id,
-                couponType: item.couponId,
-                startTm: new Date(item.createTm).toJSON(),
-                endTm: item.expiredTm ? new Date(item.expiredTm).toJSON() : null
-              }
-              this.newGiftItem(obj)
-            }
+          let arr = [
+            { shopId: 30, couponType: 1, tokenFrom: 101, startTm: 1571655898666, endTm: 1571655898666 },
+            { shopId: 30, couponType: 2, tokenFrom: 102, startTm: 1571655898666, endTm: 1571655898666 },
+            { shopId: 30, couponType: 3, tokenFrom: 103, startTm: 1571655898666, endTm: 1571655898666 },
+            { shopId: 30, couponType: 4, tokenFrom: 104, startTm: 1571655898666, endTm: 1571655898666 }
+          ]
+          arr.map(item => {
+            this.newGiftItem(item)
           })
-        }
-      }
-    })
-  }
-
-  public loadGiftHistoryList() {
-    this.ajax.httpGet({
-      url: '/user/coupon/history',
-      params: {
-        start: 0,
-        rows: 999
-      },
-      callback: (res: any) => {
-        if (res.code === 0) {
-        }
-      }
-    })
-  }
-
-  public loadGiftExpiredList() {
-    this.ajax.httpGet({
-      url: '/user/coupon/expired',
-      params: {
-        start: 0,
-        rows: 999
-      },
-      callback: (res: any) => {
-        if (res.code === 0) {
+          // res.data.coupons.map((item: any) => {
+          //   if (item.tokenFrom >= 101 && item.tokenFrom <= 106) {
+          //     let obj = {
+          //       id: item.id,
+          //       couponType: item.couponId,
+          //       startTm: new Date(item.createTm).toJSON(),
+          //       endTm: item.expiredTm ? new Date(item.expiredTm).toJSON() : null
+          //     }
+          //     this.newGiftItem(obj)
+          //   }
+          // })
         }
       }
     })
@@ -133,6 +141,9 @@ export default class GiftPackAlert extends cc.Component {
       cc.fadeOut(0.3),
       cc.callFunc(() => {
         this.node.active = false
+      }),
+      cc.callFunc(() => {
+        this.content.destroyAllChildren()
       })
     ))
   }
