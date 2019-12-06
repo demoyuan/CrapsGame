@@ -1,0 +1,75 @@
+[
+  {
+    "tokenFrom": 101,
+    "shop": [
+      {
+        "shopId": 30,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "productName": "测试_大富翁獎品1",
+        "shopImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob",
+        "productImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob",
+        "couponId": 3
+      }
+    ]
+  },
+  {
+    "tokenFrom": 102,
+    "shop": [
+      {
+        "shopId": 25,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "productName": "测试_大富翁獎品2",
+        "shopImg": "",
+        "productImg": "",
+        "couponId": 1
+      },
+      {
+        "shopId": 30,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "productName": "测试_大富翁獎品2",
+        "shopImg": "",
+        "productImg": "",
+        "couponId": 2
+      }
+    ]
+  },
+  {
+    "tokenFrom": 103,
+    "shop": [
+      {
+        "shopId": 25,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "productName": "测试_大富翁獎品1",
+        "shopImg": "",
+        "productImg": "",
+        "couponId": 1
+      }
+    ]
+  },
+  {
+    "tokenFrom": 105,
+    "shop": [
+      {
+        "shopId": 25,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "productName": "测试_大富翁獎品1",
+        "shopImg": "",
+        "productImg": "",
+        "couponId": 3
+      }
+    ]
+  },
+  {
+    "tokenFrom": 111,
+    "shop": [
+      {
+        "shopId": 30,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "productName": "测试_大富翁獎品1",
+        "shopImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob",
+        "productImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob",
+        "couponId": 1
+      }
+    ]
+  }
+]

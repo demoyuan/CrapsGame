@@ -38,7 +38,7 @@ export default class TimesAlert extends cc.Component {
     alertWidget.left = 0
     alertWidget.right = 0
     alertWidget.updateAlignment() // 执行 widget 对齐操作
-    this.box.y = -(this.node.height / 2 + this.box.height / 2)
+    // this.box.y = -(this.node.height / 2 + this.box.height / 2)
   }
 
   public openTips() {
@@ -47,7 +47,8 @@ export default class TimesAlert extends cc.Component {
     this.node.runAction(cc.sequence(
       cc.fadeIn(0.1),
       cc.callFunc(() => {
-        this.box.runAction(cc.moveBy(0.4, cc.v2(0, this.box.height - 16)))
+        this.box.runAction(cc.moveTo(0.4, cc.v2(0, -(this.node.height / 2 - this.box.height / 2 + 16))))
+        // this.box.runAction(cc.moveBy(0.4, cc.v2(0, this.box.height - 16)))
       })
     ))
   }

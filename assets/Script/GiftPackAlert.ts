@@ -9,20 +9,32 @@ export default class GiftPackAlert extends cc.Component {
   @property({ type: cc.Prefab, tooltip: 'gift item' })
   private giftItem: cc.Prefab = null
 
+  public box: cc.Node = null
   public content: any = null
 
   private ajax = new httpRequest()
+  public shopList: Array<object> | any = []
 
   protected onLoad() {
+    this.box = this.node.getChildByName('Box')
+    cc.loader.loadRes('shop', (err, jsonAsset) => {
+      this.shopList = jsonAsset.json
+    })
     this.init()
   }
 
   public init() {
     this.node.active = false
+    let titleBox = this.box.getChildByName('Title')
+    let graphics = titleBox.getComponent(cc.Graphics)
+    graphics.clear(true)
+    graphics.roundRect(-titleBox.width / 2, -titleBox.height / 2, titleBox.width, titleBox.height, 30)
+    graphics.stroke()
+    graphics.fill()
     let alertWidget = this.getComponent(cc.Widget)
     alertWidget.left = 0
     alertWidget.right = 0
-
+    alertWidget.updateAlignment() // 执行 widget 对齐操作
     this.content = this.scrolView.content
   }
 
@@ -31,14 +43,16 @@ export default class GiftPackAlert extends cc.Component {
    */
   public newGiftItem(data: any) {
     let newGift = cc.instantiate(this.giftItem)
-    let test1 = 'https://hk-storage.whoot.com/LaIQTyfAn4Oym89rA5s0aQ==.jpg' // 跨域
-    let test2 = 'https://world-storage.whoot.com/-25PjGn9fq7t9b4ZUH2KoQ==.jpg' // 正常
-    let test3 = 'https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob' // blob
-    this.changeGiftImage(newGift, test3)
-    this.changeGiftShopName(newGift, 'aaaa123')
     this.changeGiftTime(newGift, { startTm: data.startTm, endTm: data.endTm })
-    this.changeGiftBtn(newGift, data)
-    this.content.addChild(newGift)
+    cc.log(data)
+    cc.log(newGift)
+    if (data.shops.length === 1) {
+      let shop = data.shops[0]
+      this.changeGiftImage(newGift, shop.productImg)
+      this.changeGiftShopName(newGift, shop.productName)
+      this.changeGiftBtn(newGift, { shopId: shop.shopId, couponType: data.couponType, tokenFrom: data.tokenFrom })
+      this.content.addChild(newGift)
+    }
   }
 
   /**
@@ -80,7 +94,7 @@ export default class GiftPackAlert extends cc.Component {
    */
   public changeGiftTime(giftNode: cc.Node, time: any) {
     let label = giftNode.getChildByName('time').getComponent(cc.Label)
-    label.string = `有效期：${time.startTm}-${time.endTm}`
+    label.string = `有效期：${this.timeFormat({ time: time.startTm })}-${time.endTm && this.timeFormat(time.endTm)}`
   }
 
   /**
@@ -101,30 +115,26 @@ export default class GiftPackAlert extends cc.Component {
   }
 
   public loadGiftList() {
-    this.ajax.httpGet({
-      url: '/user/coupon/list',
+    this.ajax.httpPost({
+      url: '/user/coupon/allCoupons',
       callback: (res: any) => {
         if (res.code === 0) {
-          let arr = [
-            { shopId: 30, couponType: 1, tokenFrom: 101, startTm: 1571655898666, endTm: 1571655898666 },
-            { shopId: 30, couponType: 2, tokenFrom: 102, startTm: 1571655898666, endTm: 1571655898666 },
-            { shopId: 30, couponType: 3, tokenFrom: 103, startTm: 1571655898666, endTm: 1571655898666 },
-            { shopId: 30, couponType: 4, tokenFrom: 104, startTm: 1571655898666, endTm: 1571655898666 }
-          ]
-          arr.map(item => {
-            this.newGiftItem(item)
+          res.data.map((item: any) => {
+            if (item.tokenFrom >= 101 && item.tokenFrom <= 125) {
+              let shopItem = this.shopList.find((shop: any) => shop.tokenFrom === item.tokenFrom)
+              if (shopItem) {
+                let obj = {
+                  tokenFrom: item.tokenFrom,
+                  couponType: item.couponId,
+                  startTm: item.createTm,
+                  endTm: item.expiredTm,
+                  status: item.status, // 0：已使用， 1：未使用
+                  shops: shopItem.shop
+                }
+                this.newGiftItem(obj)
+              }
+            }
           })
-          // res.data.coupons.map((item: any) => {
-          //   if (item.tokenFrom >= 101 && item.tokenFrom <= 106) {
-          //     let obj = {
-          //       id: item.id,
-          //       couponType: item.couponId,
-          //       startTm: new Date(item.createTm).toJSON(),
-          //       endTm: item.expiredTm ? new Date(item.expiredTm).toJSON() : null
-          //     }
-          //     this.newGiftItem(obj)
-          //   }
-          // })
         }
       }
     })
@@ -133,12 +143,20 @@ export default class GiftPackAlert extends cc.Component {
   public openAlert() {
     this.loadGiftList()
     this.node.active = true
-    this.node.runAction(cc.fadeIn(0.4))
+    this.node.runAction(cc.sequence(
+      cc.fadeIn(0.1),
+      cc.callFunc(() => {
+        this.box.runAction(cc.moveTo(0.4, cc.v2(0, -(this.node.height / 2 - this.box.height / 2))))
+      })
+    ))
   }
 
   public closeAlert() {
     this.node.runAction(cc.sequence(
-      cc.fadeOut(0.3),
+      cc.callFunc(() => {
+        this.box.runAction(cc.moveTo(0.3, cc.v2(0, -(this.node.height / 2 + this.box.height / 2 + 170))))
+      }),
+      cc.fadeOut(0.8),
       cc.callFunc(() => {
         this.node.active = false
       }),
@@ -146,5 +164,25 @@ export default class GiftPackAlert extends cc.Component {
         this.content.destroyAllChildren()
       })
     ))
+  }
+
+  public timeFormat({ time }) {
+    let data = new Date(time)
+    let obj = {
+      y: data.getFullYear(),
+      m: this.supplement(data.getMonth() + 1),
+      d: this.supplement(data.getDate()),
+      h: this.supplement(data.getHours()),
+      mi: this.supplement(data.getMinutes()),
+      s: this.supplement(data.getSeconds())
+    }
+    return `${obj.y}/${obj.m}/${obj.d}`
+  }
+
+  /**
+   * @description 个位数补零
+   */
+  public supplement = (n: any) => {
+    return (n = n < 10 ? '0' + n : n.toString())
   }
 }

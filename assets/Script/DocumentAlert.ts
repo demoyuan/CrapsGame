@@ -2,7 +2,10 @@ const { ccclass, property } = cc._decorator
 
 @ccclass
 export default class DocumentAlert extends cc.Component {
+  private box: cc.Node = null
+
   protected onLoad() {
+    this.box = this.node.getChildByName('Box')
     this.init()
   }
 
@@ -11,6 +14,12 @@ export default class DocumentAlert extends cc.Component {
     let alertWidget = this.getComponent(cc.Widget)
     alertWidget.left = 0
     alertWidget.right = 0
+
+    let graphics = this.box.getComponent(cc.Graphics)
+    graphics.roundRect(-this.box.width / 2, -this.box.height / 2, this.box.width, this.box.height, 30)
+    graphics.fillColor = cc.Color.WHITE
+    graphics.stroke()
+    graphics.fill()
   }
 
   public openAlert() {
@@ -25,5 +34,9 @@ export default class DocumentAlert extends cc.Component {
         this.node.active = false
       })
     ))
+  }
+
+  public goAppContact() {
+    alert(JSON.stringify({ touchPos: 'Contact' }))
   }
 }

@@ -33,6 +33,7 @@ export default class Game extends cc.Component {
   public playerPos: number = 1
 
   protected onLoad() {
+    cc.view.enableAutoFullScreen(false)
     this.mapComp = this.scrollMap.getComponent('MapEvent')
     this.playerComp = this.player.getComponent('Player')
     this.diceComp = this.dice.getComponent('Dice')
@@ -45,28 +46,32 @@ export default class Game extends cc.Component {
   private initGame() {
     this.player.node.position = this.mapComp.getGridPos(this.playerPos)
     this.initUserToken()
-    this.getUserData()
   }
 
   /**
    * 获取用户登录Token
    */
   public initUserToken() {
-    let url = new URL(window.location.href)
-    let token = url.searchParams.get('token')
-    // window.location.href = window.location.href + '&token2=asdasd'
+    let token = ''
     // @ts-ignore
     if (window.webkit && window.webkit.messageHandlers) {
       // @ts-ignore
       window.webkit.messageHandlers.getUserDataForIos.postMessage({ title: '' })
       // @ts-ignore
       window.getUserDataForIos = (res: any) => {
+        // 异步调用
         let userInfo = JSON.parse(res)
         token = userInfo.token
-        cc.log('IOS user token: ', userInfo.token)
+        cc.log('ISO user token: ', token)
+        cc.sys.localStorage.setItem('userData', JSON.stringify({ token }))
+        this.getUserData()
       }
+    } else {
+      let urlToken = new URL(window.location.href).searchParams.get('token')
+      token = urlToken ? urlToken : ''
+      cc.sys.localStorage.setItem('userData', JSON.stringify({ token }))
+      this.getUserData()
     }
-    cc.sys.localStorage.setItem('userData', JSON.stringify({ token }))
   }
 
   public getUserData() {
@@ -131,8 +136,8 @@ export default class Game extends cc.Component {
         }),
         ...arr,
         cc.callFunc(() => {
-          let { win, gift } = this.mapComp.checkWin(winType)
-          win && this.winAlertComp.openTips(gift)
+          let { win, shop } = this.mapComp.checkWin(winType)
+          win && this.winAlertComp.openTips(shop)
           this.diceComp.buttonDisabled = false
         })
       )
