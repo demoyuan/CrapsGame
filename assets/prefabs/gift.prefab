@@ -1121,7 +1121,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "9bbda31e-ad49-43c9-aaf2-f7d9896bac69"
+      "__uuid__": "410fb916-8721-4663-bab8-34397391ace7"
     },
     "_type": 1,
     "_sizeMode": 0,
@@ -1180,11 +1180,11 @@
     "_enabled": true,
     "alignMode": 1,
     "_target": null,
-    "_alignFlags": 41,
+    "_alignFlags": 45,
     "_left": 20,
     "_right": 20,
     "_top": 230,
-    "_bottom": 10,
+    "_bottom": 0,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,

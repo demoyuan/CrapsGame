@@ -47,25 +47,33 @@ export default class GiftPackAlert extends cc.Component {
   public newGiftItem(data: any) {
     let newGift = cc.instantiate(this.giftItem)
     this.changeGiftTime(newGift, { startTm: data.startTm, endTm: data.endTm })
-    this.newShopItem(newGift, data)
+
     if (data.shops.length === 1) {
       let shop = data.shops[0]
       this.changeGiftImage(newGift, shop.productImg)
       this.changeGiftShopName(newGift, shop.productName)
       this.changeGiftBtn(newGift, { shopId: shop.shopId, couponType: data.couponType, tokenFrom: data.tokenFrom })
-      this.content.addChild(newGift)
+    } else {
+      data.shops.map((item: any) => {
+        this.newShopItem(newGift, item)
+      })
+      this.changeGiftImage(newGift, '')
+      this.changeGiftShopName(newGift, 'aaaaa')
     }
+    this.content.addChild(newGift)
   }
 
+  /**
+   * 创建新的shop item节点
+   */
   public newShopItem(giftItem: cc.Node, data: any) {
     let newShop = cc.instantiate(this.shopItem)
     let shopItemLayout = giftItem.getChildByName('shopItemLayout')
     shopItemLayout.addChild(newShop)
-    let shopItemLayoutHeight = shopItemLayout.height || (newShop.height + 60 + 20)
+    shopItemLayout.getComponent(cc.Layout).updateLayout()
+    let shopItemLayoutHeight = (newShop.height + 60)
     giftItem.height += shopItemLayoutHeight
-    giftItem.getChildByName('bg').height = shopItemLayoutHeight
-    shopItemLayout.setPosition(0, -shopItemLayoutHeight)
-    cc.log(shopItemLayout)
+    giftItem.getChildByName('bg').height += shopItemLayoutHeight
   }
 
 
@@ -73,6 +81,9 @@ export default class GiftPackAlert extends cc.Component {
    * 修改Gift Prefab 图片
    */
   public changeGiftImage(giftNode: cc.Node, url: string) {
+    if (!url) {
+      return false
+    }
     let imgSprite = giftNode.getChildByName('img').getComponent(cc.Sprite)
     // 加载远程图片
     cc.loader.load({ url, type: 'jpg' }, (err: any, texture: any) => {
@@ -155,7 +166,7 @@ export default class GiftPackAlert extends cc.Component {
   }
 
   public loadTest() {
-    let shopItem = this.shopList.find((shop: any) => shop.tokenFrom === 101)
+    let shopItem = this.shopList.find((shop: any) => shop.tokenFrom === 102)
     if (shopItem) {
       let obj = {
         tokenFrom: shopItem.tokenFrom,
