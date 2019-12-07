@@ -102,14 +102,6 @@ export default class MapEvent extends cc.Component {
    * 检查是否中奖
    */
   public checkWin(type: number) {
-    // switch (type) {
-    //   case 0: // 无奖励
-    //     return { win: false, gift: 0 }
-    //   case 1: // 再来一次
-    //     return { win: true, gift: 'times' }
-    //   default:
-    //     return { win: false, gift: 0 }
-    // }
     let shop = this.shopList.find((item: any) => item.tokenFrom === type)
     cc.log(shop)
     if (shop) {

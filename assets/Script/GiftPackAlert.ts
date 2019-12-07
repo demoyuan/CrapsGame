@@ -9,6 +9,9 @@ export default class GiftPackAlert extends cc.Component {
   @property({ type: cc.Prefab, tooltip: 'gift item' })
   private giftItem: cc.Prefab = null
 
+  @property({ type: cc.Prefab, tooltip: 'shop item' })
+  private shopItem: cc.Prefab = null
+
   public box: cc.Node = null
   public content: any = null
 
@@ -44,8 +47,7 @@ export default class GiftPackAlert extends cc.Component {
   public newGiftItem(data: any) {
     let newGift = cc.instantiate(this.giftItem)
     this.changeGiftTime(newGift, { startTm: data.startTm, endTm: data.endTm })
-    cc.log(data)
-    cc.log(newGift)
+    this.newShopItem(newGift, data)
     if (data.shops.length === 1) {
       let shop = data.shops[0]
       this.changeGiftImage(newGift, shop.productImg)
@@ -54,6 +56,18 @@ export default class GiftPackAlert extends cc.Component {
       this.content.addChild(newGift)
     }
   }
+
+  public newShopItem(giftItem: cc.Node, data: any) {
+    let newShop = cc.instantiate(this.shopItem)
+    let shopItemLayout = giftItem.getChildByName('shopItemLayout')
+    shopItemLayout.addChild(newShop)
+    let shopItemLayoutHeight = shopItemLayout.height || (newShop.height + 60 + 20)
+    giftItem.height += shopItemLayoutHeight
+    giftItem.getChildByName('bg').height = shopItemLayoutHeight
+    shopItemLayout.setPosition(0, -shopItemLayoutHeight)
+    cc.log(shopItemLayout)
+  }
+
 
   /**
    * 修改Gift Prefab 图片
@@ -140,8 +154,24 @@ export default class GiftPackAlert extends cc.Component {
     })
   }
 
+  public loadTest() {
+    let shopItem = this.shopList.find((shop: any) => shop.tokenFrom === 101)
+    if (shopItem) {
+      let obj = {
+        tokenFrom: shopItem.tokenFrom,
+        couponType: shopItem.couponId,
+        startTm: 1575730406599,
+        endTm: 1575770406599,
+        status: 1, // 0：已使用， 1：未使用
+        shops: shopItem.shop
+      }
+      this.newGiftItem(obj)
+    }
+  }
+
   public openAlert() {
-    this.loadGiftList()
+    // this.loadGiftList()
+    this.loadTest()
     this.node.active = true
     this.node.runAction(cc.sequence(
       cc.fadeIn(0.1),

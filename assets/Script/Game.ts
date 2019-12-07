@@ -100,7 +100,7 @@ export default class Game extends cc.Component {
     let num = this.diceComp.onThrow()
     if (num !== 0) {
       // test
-      // this.playSucFnc(num, 1)
+      // this.playSucFnc(num, 101)
 
       this.tipsComp.showLoading({ status: true })
       this.ajax.httpPost({
