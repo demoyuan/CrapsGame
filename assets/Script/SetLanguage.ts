@@ -7,7 +7,7 @@ export default class SetLanguage extends cc.Component {
   protected onLoad() {
     const navLang = navigator.language
     // this.lang = navLang === 'en-US' ? 'en-US' : 'zh-HK'
-    this.init()
+    // this.init()
   }
 
   public init() {

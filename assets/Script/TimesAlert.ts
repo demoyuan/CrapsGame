@@ -22,8 +22,15 @@ export default class TimesAlert extends cc.Component {
     let Item1Node = this.box.getChildByName('Item1')
     this.completionsNode = Item1Node.getChildByName('completions')
     this.finishNode = Item1Node.getChildByName('finish')
-    this.finishNode.active = this.getTimes === 3
-    this.completionsNode.active = this.getTimes !== 3
+    this.finishNode.active = this.getTimes >= 3
+    this.completionsNode.active = this.getTimes < 3
+
+    // 去完成按钮边框
+    // let btnBox = this.completionsNode.getChildByName('goFinish')
+    // let btnGraphics = btnBox.getComponent(cc.Graphics)
+    // btnGraphics.roundRect(-btnBox.width / 2, -btnBox.height / 2, btnBox.width, btnBox.height, 16)
+    // btnGraphics.stroke()
+    // btnGraphics.fill()
   }
 
   public init() {
@@ -66,6 +73,7 @@ export default class TimesAlert extends cc.Component {
   }
 
   public openAppCommentPage() {
+    this.closeTips()
     alert(JSON.stringify({ touchPos: 'Comment' }))
   }
 }

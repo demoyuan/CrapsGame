@@ -3,18 +3,15 @@ import httpRequest from './HttpRequest'
 
 @ccclass
 export default class Dice extends cc.Component {
-  @property({ type: cc.Node, tooltip: '背景' })
-  public bg: cc.Node = null
-
   @property({ type: cc.Label, tooltip: '剩余次数' })
   public timesLabel: cc.Label = null
+
+  private btn: cc.Button = null
 
   /** 剩余游戏次数 */
   public times: number = 0
   /** 点击冷却 防止重复点击 */
   public buttonDisabled: boolean = false
-
-  private btn: cc.Button = null
 
   protected onLoad() {
     this.btn = this.node.getComponent(cc.Button)
@@ -22,7 +19,7 @@ export default class Dice extends cc.Component {
 
   protected update() {
     this.timesLabel.string = `x${this.times}`
-    this.times === 0 ? this.disOnClick() : this.enOnClick()
+    // this.times === 0 ? this.disOnClick() : this.enOnClick()
   }
 
   /**
@@ -30,9 +27,6 @@ export default class Dice extends cc.Component {
    */
   public disOnClick() {
     this.btn.interactable = false
-    // cc.loader.loadRes('ui/btn_go_n', cc.SpriteFrame, (err, spriteFrame) => {
-    //   this.bg.getComponent(cc.Sprite).spriteFrame = spriteFrame
-    // })
   }
 
   /**
@@ -50,6 +44,7 @@ export default class Dice extends cc.Component {
       cc.scaleTo(0.1, 0.92, 0.92),
       cc.scaleTo(0.1, 1, 1)
     ))
+    this.buttonDisabled = this.times === 0
     return this.buttonDisabled ? 0 : 1
   }
 

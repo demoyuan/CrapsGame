@@ -4,6 +4,7 @@ const { ccclass, property } = cc._decorator
 export default class Alert extends cc.Component {
   public box: cc.Node = null
   public fire: cc.Node = null
+  // public shopList: Array<object> | any = []
 
   protected onLoad() {
     this.box = this.node.getChildByName('Box')
@@ -11,6 +12,10 @@ export default class Alert extends cc.Component {
     this.init()
     let repeat = cc.repeatForever(cc.rotateBy(1.0, 90))
     this.fire.runAction(repeat)
+
+    // cc.loader.loadRes('shop', (err, jsonAsset) => {
+    //   this.shopList = jsonAsset.json
+    // })
   }
 
   public init() {
@@ -29,11 +34,6 @@ export default class Alert extends cc.Component {
   }
 
   public openTips(giftData?: any) {
-    giftData = {
-      img: 'https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob',
-      shopName: '餐厅名123123',
-      productName: 'xxxx 一张'
-    }
     let giftNode = this.box.getChildByName('gift')
     let imgSprite = giftNode.getChildByName('img').getComponent(cc.Sprite)
     let shopNameLabel = giftNode.getChildByName('shopName').getComponent(cc.Label)

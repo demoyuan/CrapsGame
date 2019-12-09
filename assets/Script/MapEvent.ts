@@ -102,12 +102,16 @@ export default class MapEvent extends cc.Component {
    * 检查是否中奖
    */
   public checkWin(type: number) {
-    let shop = this.shopList.find((item: any) => item.tokenFrom === type)
-    cc.log(shop)
-    if (shop) {
-      return { win: true, shop }
+    let shopItem = this.shopList.find((item: any) => item.tokenFrom === type)
+    cc.log(shopItem)
+    if (shopItem) {
+      if (shopItem.shop.length === 1) {
+        return { win: true, shopItem: { img: shopItem.productImg, shopName: shopItem.shop[0].shopName, productName: shopItem.productName } }
+      } else {
+        return { win: true, shopItem: { img: shopItem.productImg, shopName: '', productName: shopItem.productName } }
+      }
     } else {
-      return { win: false, shop: [] }
+      return { win: false, shopItem: null }
     }
   }
 }

@@ -21,6 +21,9 @@ export default class Game extends cc.Component {
   @property({ type: cc.Node, tooltip: 'Tips' })
   private tips: cc.Node = null
 
+  @property({ type: cc.Label, tooltip: '参与人数' })
+  private joinPeopleNum: cc.Label = null
+
   private mapComp: any = null
   private playerComp: any = null
   private diceComp: any = null
@@ -33,7 +36,6 @@ export default class Game extends cc.Component {
   public playerPos: number = 1
 
   protected onLoad() {
-    cc.view.enableAutoFullScreen(false)
     this.mapComp = this.scrollMap.getComponent('MapEvent')
     this.playerComp = this.player.getComponent('Player')
     this.diceComp = this.dice.getComponent('Dice')
@@ -70,6 +72,7 @@ export default class Game extends cc.Component {
       let urlToken = new URL(window.location.href).searchParams.get('token')
       token = urlToken ? urlToken : ''
       cc.sys.localStorage.setItem('userData', JSON.stringify({ token }))
+      cc.log('URL user token: ', token)
       this.getUserData()
     }
   }
@@ -85,6 +88,7 @@ export default class Game extends cc.Component {
           this.diceComp.times = res.data.amountChance
           this.timesAlertComp.firstLogin = res.data.daily === 1 ? true : false
           this.timesAlertComp.getTimes = res.data.redeemChance
+          this.joinPeopleNum.string = `参与人次：${res.data.amountPlayers}`
         }
         // 初始化玩家位置
         this.player.node.position = this.mapComp.getGridPos(this.playerPos)
@@ -114,6 +118,8 @@ export default class Game extends cc.Component {
           }
         }
       })
+    } else {
+      this.timesAlertComp.openTips()
     }
   }
 
@@ -136,8 +142,8 @@ export default class Game extends cc.Component {
         }),
         ...arr,
         cc.callFunc(() => {
-          let { win, shop } = this.mapComp.checkWin(winType)
-          win && this.winAlertComp.openTips(shop)
+          let { win, shopItem } = this.mapComp.checkWin(winType)
+          win && this.winAlertComp.openTips(shopItem)
           this.diceComp.buttonDisabled = false
         })
       )

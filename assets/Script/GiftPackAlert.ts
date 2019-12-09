@@ -12,6 +12,9 @@ export default class GiftPackAlert extends cc.Component {
   @property({ type: cc.Prefab, tooltip: 'shop item' })
   private shopItem: cc.Prefab = null
 
+  @property({ type: cc.Node, tooltip: '兑换完毕提示' })
+  private giftEmptyTips: cc.Node = null
+
   public box: cc.Node = null
   public content: any = null
 
@@ -47,18 +50,22 @@ export default class GiftPackAlert extends cc.Component {
   public newGiftItem(data: any) {
     let newGift = cc.instantiate(this.giftItem)
     this.changeGiftTime(newGift, { startTm: data.startTm, endTm: data.endTm })
+    this.changeGiftImage(newGift, data.productImg)
+    this.changeGiftShopName(newGift, data.productName)
+    this.changeGiftStatus(newGift, { status: data.status, endTm: data.endTm })
 
     if (data.shops.length === 1) {
       let shop = data.shops[0]
-      this.changeGiftImage(newGift, shop.productImg)
-      this.changeGiftShopName(newGift, shop.productName)
-      this.changeGiftBtn(newGift, { shopId: shop.shopId, couponType: data.couponType, tokenFrom: data.tokenFrom })
+      this.changeGiftBtn(newGift, { shopId: shop.shopId, couponType: data.couponType, tokenFrom: data.tokenFrom, status: data.status })
     } else {
+      if (data.status === 0) {
+        this.changeGiftBtn(newGift, { status: data.status })
+      } else {
+        newGift.getChildByName('btn').active = false
+      }
       data.shops.map((item: any) => {
-        this.newShopItem(newGift, item)
+        this.newShopItem(newGift, { ...item, ...{ couponType: data.couponType, tokenFrom: data.tokenFrom, status: data.status } })
       })
-      this.changeGiftImage(newGift, '')
-      this.changeGiftShopName(newGift, 'aaaaa')
     }
     this.content.addChild(newGift)
   }
@@ -71,9 +78,16 @@ export default class GiftPackAlert extends cc.Component {
     let shopItemLayout = giftItem.getChildByName('shopItemLayout')
     shopItemLayout.addChild(newShop)
     shopItemLayout.getComponent(cc.Layout).updateLayout()
-    let shopItemLayoutHeight = (newShop.height + 60)
+    let shopItemLayoutHeight = (newShop.height + 15)
     giftItem.height += shopItemLayoutHeight
     giftItem.getChildByName('bg').height += shopItemLayoutHeight
+    this.changeGiftImage(newShop, data.shopImg)
+    this.changeGiftShopName(newShop, data.shopName)
+    if (data.status === 0) {
+      newShop.getChildByName('btn').active = false
+    } else {
+      this.changeGiftBtn(newShop, { shopId: data.shopId, couponType: data.couponType, tokenFrom: data.tokenFrom, status: data.status })
+    }
   }
 
 
@@ -100,10 +114,6 @@ export default class GiftPackAlert extends cc.Component {
         ))
       }
     })
-    // 加载本地图片
-    // cc.loader.loadRes('ui/btn_go_n', cc.SpriteFrame, (err, spriteFrame) => {
-    //   imgSprite.spriteFrame = spriteFrame
-    // })
   }
 
   /**
@@ -119,24 +129,75 @@ export default class GiftPackAlert extends cc.Component {
    */
   public changeGiftTime(giftNode: cc.Node, time: any) {
     let label = giftNode.getChildByName('time').getComponent(cc.Label)
-    label.string = `有效期：${this.timeFormat({ time: time.startTm })}-${time.endTm && this.timeFormat(time.endTm)}`
+    if (time.endTm) {
+      label.string = `有效期：${this.timeFormat({ time: time.startTm })}-${this.timeFormat({ time: time.endTm })}`
+    } else {
+      label.string = ''
+    }
+  }
+
+  /**
+   * 修改奖品状态
+   */
+  public changeGiftStatus(giftNode: cc.Node, data: any) {
+    let statusNode = giftNode.getChildByName('status')
+    let imgSprite = statusNode.getComponent(cc.Sprite)
+    if (data.status === 0) { // 已兑换
+      cc.loader.loadRes('ui/tag_redeemed', cc.SpriteFrame, (err, spriteFrame) => {
+        imgSprite.spriteFrame = spriteFrame
+      })
+      statusNode.active = true
+    }
+    else if (data.endTm && data.endTm < new Date().getTime()) { // 已过期
+      cc.loader.loadRes('ui/tag_expired', cc.SpriteFrame, (err, spriteFrame) => {
+        imgSprite.spriteFrame = spriteFrame
+      })
+      statusNode.active = true
+      giftNode.getChildByName('btn').active = false
+    }
   }
 
   /**
    * 跳转app门店页面
    */
   public changeGiftBtn(giftNode: cc.Node, data: any) {
-    let btn = giftNode.getChildByName('btn').getComponent(cc.Button)
+    let btnNode = giftNode.getChildByName('btn')
+    let btn = btnNode.getComponent(cc.Button)
     let clickEventHandler = new cc.Component.EventHandler()
     clickEventHandler.target = this.node
     clickEventHandler.component = 'GiftPackAlert'
     clickEventHandler.handler = 'goAppShopInfo'
     clickEventHandler.customEventData = data
+    if (data.status === 0) {
+      let btnLabel = btnNode.getComponentInChildren(cc.Label)
+      btnLabel.string = '評論'
+      btnLabel.node.color = new cc.Color(252, 74, 26)
+      clickEventHandler.handler = 'goAppShopComment'
+      cc.loader.loadRes('ui/btn_tocomplete', cc.SpriteFrame, (err, spriteFrame) => {
+        btnNode.getComponentInChildren(cc.Sprite).spriteFrame = spriteFrame
+      })
+    }
     btn.clickEvents.push(clickEventHandler)
   }
 
   public goAppShopInfo(event: any, customEventData: any) {
-    alert(JSON.stringify({ touchPos: 'ShopInfo', ...customEventData }))
+    this.ajax.httpPost({
+      url: '/user/game/limit',
+      params: {
+        tokenFrom: customEventData.tokenFrom
+      },
+      callback: (res: any) => {
+        if (res.code === 0) {
+          alert(JSON.stringify({ touchPos: 'ShopInfo', ...customEventData }))
+        } else {
+          this.closeAlert()
+          this.giftEmptyTips.getComponent('GiftEmptyTips').openTips()
+        }
+      }
+    })
+  }
+  public goAppShopComment(event: any) {
+    alert(JSON.stringify({ touchPos: 'Comment' }))
   }
 
   public loadGiftList() {
@@ -144,25 +205,40 @@ export default class GiftPackAlert extends cc.Component {
       url: '/user/coupon/allCoupons',
       callback: (res: any) => {
         if (res.code === 0) {
-          res.data.map((item: any) => {
-            if (item.tokenFrom >= 101 && item.tokenFrom <= 125) {
-              let shopItem = this.shopList.find((shop: any) => shop.tokenFrom === item.tokenFrom)
-              if (shopItem) {
-                let obj = {
-                  tokenFrom: item.tokenFrom,
-                  couponType: item.couponId,
-                  startTm: item.createTm,
-                  endTm: item.expiredTm,
-                  status: item.status, // 0：已使用， 1：未使用
-                  shops: shopItem.shop
+          let giftArr = res.data.filter((item: any) => item.tokenFrom >= 101 && item.tokenFrom <= 125)
+          if (giftArr.length > 0) {
+            this.showEmptyTips(false)
+            giftArr.map((item: any) => {
+              if (item.tokenFrom >= 101 && item.tokenFrom <= 125) {
+                let shopItem = this.shopList.find((shop: any) => shop.tokenFrom === item.tokenFrom)
+                if (shopItem) {
+                  let obj = {
+                    tokenFrom: item.tokenFrom,
+                    couponType: item.couponId,
+                    startTm: item.createTm,
+                    endTm: item.expiredTm,
+                    status: item.status, // 0：已使用， 1：未使用
+                    shops: shopItem.shop,
+                    productName: shopItem.productName,
+                    productImg: shopItem.productImg
+                  }
+                  this.newGiftItem(obj)
                 }
-                this.newGiftItem(obj)
               }
-            }
-          })
+            })
+          } else {
+            this.showEmptyTips(true)
+          }
         }
       }
     })
+  }
+
+  /**
+   * 显示空背包提示
+   */
+  public showEmptyTips(show: boolean) {
+    this.box.getChildByName('emptyTips').active = show
   }
 
   public loadTest() {
@@ -174,15 +250,17 @@ export default class GiftPackAlert extends cc.Component {
         startTm: 1575730406599,
         endTm: 1575770406599,
         status: 1, // 0：已使用， 1：未使用
-        shops: shopItem.shop
+        shops: shopItem.shop,
+        productName: shopItem.productName,
+        productImg: shopItem.productImg
       }
       this.newGiftItem(obj)
     }
   }
 
   public openAlert() {
-    // this.loadGiftList()
-    this.loadTest()
+    this.loadGiftList()
+    // this.loadTest()
     this.node.active = true
     this.node.runAction(cc.sequence(
       cc.fadeIn(0.1),

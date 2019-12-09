@@ -106,9 +106,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 192,
-      "g": 192,
-      "b": 192,
+      "r": 246,
+      "g": 246,
+      "b": 244,
       "a": 255
     },
     "_contentSize": {
@@ -514,7 +514,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 208,
+      "width": 146,
       "height": 56
     },
     "_anchorPoint": {
@@ -524,7 +524,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 257,
+      "x": 287,
       "y": -74,
       "z": 0
     },
@@ -581,7 +581,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 208,
+      "width": 146,
       "height": 56
     },
     "_anchorPoint": {
@@ -793,7 +793,7 @@
     },
     "_enabled": true,
     "duration": 0.1,
-    "zoomScale": 0.8,
+    "zoomScale": 0.96,
     "clickEvents": [],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
@@ -876,7 +876,7 @@
     "_target": null,
     "_alignFlags": 36,
     "_left": 0,
-    "_right": 14,
+    "_right": 15,
     "_top": 0,
     "_bottom": 46,
     "_verticalCenter": 0,
