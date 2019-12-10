@@ -219,7 +219,7 @@ export default class GiftPackAlert extends cc.Component {
                     startTm: item.createTm,
                     endTm: item.expiredTm,
                     status: item.status, // 0：已使用， 1：未使用
-                    shops: shopItem.shop,
+                    shops: shopItem.shop || [],
                     productName: shopItem.productName,
                     productImg: shopItem.productImg
                   }

@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "fafdfd9a-ff9c-49f8-bae5-55e792514024",
+  "uuid": "a5e5436a-9b6e-415a-8124-db4dbb88dbc4",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "btn_myprize": {
+    "btn_rules": {
       "ver": "1.0.4",
-      "uuid": "29d7afc7-c044-4931-8230-e9fb4c715a4f",
-      "rawTextureUuid": "fafdfd9a-ff9c-49f8-bae5-55e792514024",
+      "uuid": "1092cd07-34c7-4003-be4c-d13411537c69",
+      "rawTextureUuid": "a5e5436a-9b6e-415a-8124-db4dbb88dbc4",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 200,
-      "height": 181,
-      "rawWidth": 200,
-      "rawHeight": 181,
+      "width": 261,
+      "height": 119,
+      "rawWidth": 261,
+      "rawHeight": 119,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

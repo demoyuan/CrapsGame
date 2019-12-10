@@ -86,8 +86,8 @@ export default class MapEvent extends cc.Component {
     let nowPlayerPos = playerPos
     for (let i = 1; i <= mapNum; i++) {
       nowPlayerPos += 1
-      if (nowPlayerPos > this.mapLength) {
-        nowPlayerPos = 1
+      if (nowPlayerPos >= this.mapLength) {
+        nowPlayerPos = this.mapLength // 终点后不跳
       }
       let pos = this.getGridPos(nowPlayerPos)
       arr = [...arr, this.playerComp.jumpFnc(pos)]
@@ -104,7 +104,7 @@ export default class MapEvent extends cc.Component {
   public checkWin(type: number) {
     let shopItem = this.shopList.find((item: any) => item.tokenFrom === type)
     cc.log(shopItem)
-    if (shopItem) {
+    if (shopItem && shopItem.shop) {
       if (shopItem.shop.length === 1) {
         return { win: true, shopItem: { img: shopItem.productImg, shopName: shopItem.shop[0].shopName, productName: shopItem.productName } }
       } else {

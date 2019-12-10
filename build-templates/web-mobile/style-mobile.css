@@ -108,16 +108,16 @@ p.footer {
     border-radius: 20px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset;
     transition: width .4s ease-in-out; 
-    background-color: #ff6600;    
+    background-color: #ff6600;
 }
 
 .stripes span {
     background-size: 30px 30px;
     background-image: linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
                         transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
-                        transparent 75%, transparent);            
+                        transparent 75%, transparent);
     
-    animation: animate-stripes 1s linear infinite;             
+    animation: animate-stripes 1s linear infinite;
 }
 
 @keyframes animate-stripes {

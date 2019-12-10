@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "634ea024-5136-4bc5-8783-d3d46a38a5c3",
+  "uuid": "2e4092e5-08cb-44d7-9163-7c97f22cbe65",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "myreward_pic": {
+    "close2": {
       "ver": "1.0.4",
-      "uuid": "3eac93d9-fcb8-4140-a292-d58b7b713621",
-      "rawTextureUuid": "634ea024-5136-4bc5-8783-d3d46a38a5c3",
+      "uuid": "6b0bacd6-0fd2-4ab3-ac2f-37a9cf54bf49",
+      "rawTextureUuid": "2e4092e5-08cb-44d7-9163-7c97f22cbe65",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 159,
-      "height": 169,
-      "rawWidth": 159,
-      "rawHeight": 169,
+      "width": 60,
+      "height": 60,
+      "rawWidth": 60,
+      "rawHeight": 60,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

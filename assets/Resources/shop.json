@@ -2,57 +2,57 @@
   {
     "tokenFrom": 101,
     "productName": "测试_大富翁獎品1",
-    "productImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob",
+    "productImg": "https://qc-storage.whoot.com/QioaJlZp_wztoE_ZiyV6VA==.blob",
     "couponId": 3,
     "shop": [
       {
         "shopId": 30,
         "shopName": "兑换大赢家测试餐厅1号",
-        "shopImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob"
+        "shopImg": "https://hk-storage.whoot.com/pWLIYmFUomTjjGgYWjvGYA==.jpg"
       }
     ]
   },
   {
     "tokenFrom": 102,
     "productName": "测试_大富翁獎品2",
-    "productImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob",
+    "productImg": "https://qc-storage.whoot.com/z-y3SvfMVXzJsZBA--FzkA==.blob",
     "couponId": 2,
     "shop": [
       {
         "shopId": 25,
         "shopName": "兑换大赢家测试餐厅1号",
-        "shopImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob"
+        "shopImg": "https://hk-storage.whoot.com/tfrJfw7JpyIZtRmffb4DuQ==.blob"
       },
       {
         "shopId": 30,
         "shopName": "兑换大赢家测试餐厅2号（迪吧被征用了）",
-        "shopImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob"
+        "shopImg": "https://hk-storage.whoot.com/tfrJfw7JpyIZtRmffb4DuQ==.blob"
       }
     ]
   },
   {
     "tokenFrom": 103,
     "productName": "测试_大富翁獎品3",
-    "productImg": "",
+    "productImg": "https://hk-storage.whoot.com/WJIzRiuzFXew2Ioi6zd1WQ==.jpg",
     "couponId": 1,
     "shop": [
       {
         "shopId": 25,
         "shopName": "兑换大赢家测试餐厅2号（迪吧被征用了）",
-        "shopImg": ""
+        "shopImg": "https://hk-storage.whoot.com/Lh3eTWiRThhiR7BwOJMBWA==.jpeg"
       }
     ]
   },
   {
     "tokenFrom": 105,
     "productName": "测试_大富翁獎品5-1",
-    "productImg": "",
+    "productImg": "https://hk-storage.whoot.com/EXAvLIobqnjUJy4XMyMJow==.blob",
     "couponId": 3,
     "shop": [
       {
         "shopId": 25,
         "shopName": "兑换大赢家测试餐厅2号（迪吧被征用了）",
-        "shopImg": ""
+        "shopImg": "https://hk-storage.whoot.com/WJIzRiuzFXew2Ioi6zd1WQ==.jpg"
       }
     ]
   },
@@ -65,7 +65,7 @@
       {
         "shopId": 30,
         "shopName": "兑换大赢家测试餐厅1号",
-        "shopImg": "https://world-storage.whoot.com/3-W0GrGJiQbWy-BLWHv9gg==.blob"
+        "shopImg": "https://hk-storage.whoot.com/9i22ap9TQAd5ZkAfGQeKSQ==.jpeg"
       }
     ]
   }

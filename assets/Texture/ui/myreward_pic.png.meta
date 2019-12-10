@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "bf20c672-e592-44e9-a35e-12d7fd9fac43",
+  "uuid": "3e6f8384-948d-45a8-bd52-37389410892a",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "tanchuan_prize_title": {
+    "myreward_pic": {
       "ver": "1.0.4",
-      "uuid": "c4617bec-a2c5-4edb-85d0-88314eca308d",
-      "rawTextureUuid": "bf20c672-e592-44e9-a35e-12d7fd9fac43",
+      "uuid": "dd8a14a2-a580-4df0-8acb-f6ec44336a97",
+      "rawTextureUuid": "3e6f8384-948d-45a8-bd52-37389410892a",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 591,
-      "height": 177,
-      "rawWidth": 591,
-      "rawHeight": 177,
+      "width": 159,
+      "height": 169,
+      "rawWidth": 159,
+      "rawHeight": 169,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

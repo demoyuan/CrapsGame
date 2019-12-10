@@ -90,11 +90,20 @@ export default class Game extends cc.Component {
           this.timesAlertComp.getTimes = res.data.redeemChance
           this.joinPeopleNum.string = `参与人次：${res.data.amountPlayers}`
         }
-        // 初始化玩家位置
-        this.player.node.position = this.mapComp.getGridPos(this.playerPos)
-        this.mapComp.mapCenter(this.player.node.position)
+        this.initPlayerPos()
       }
     })
+  }
+
+  /**
+   * 设置玩家位置
+   */
+  public initPlayerPos() {
+    if (this.playerPos >= this.mapComp.mapLength) {
+      this.playerPos = this.mapComp.mapLength
+    }
+    this.player.node.position = this.mapComp.getGridPos(this.playerPos)
+    this.mapComp.mapCenter(this.player.node.position)
   }
 
   /**
@@ -106,6 +115,13 @@ export default class Game extends cc.Component {
       // test
       // this.playSucFnc(num, 101)
 
+      // 已到终点
+      if (this.playerPos >= this.mapComp.mapLength) {
+        this.playerPos = this.mapComp.mapLength
+        this.tipsComp.showMessage({ text: '恭喜您已獲得所有獎勵' })
+        return
+      }
+
       this.tipsComp.showLoading({ status: true })
       this.ajax.httpPost({
         url: '/user/game/playGame',
@@ -114,7 +130,16 @@ export default class Game extends cc.Component {
           if (res.code === 0) {
             this.playSucFnc(num, res.data.rewardType)
           } else {
-            this.tipsComp.showMessage({ text: res.message })
+            switch (res.code) {
+              case 1082:
+                this.initPlayerPos()
+                this.diceComp.disOnClick()
+                this.tipsComp.showMessage({ text: '恭喜您已獲得所有獎勵' })
+                break
+              default:
+                this.tipsComp.showMessage({ text: res.message })
+                break
+            }
           }
         }
       })
