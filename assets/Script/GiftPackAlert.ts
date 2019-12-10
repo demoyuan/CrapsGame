@@ -54,13 +54,13 @@ export default class GiftPackAlert extends cc.Component {
     this.changeGiftShopName(newGift, data.productName)
     this.changeGiftStatus(newGift, { status: data.status, endTm: data.endTm })
 
-    if (data.shops.length === 1) {
+    if (data.shops.length === 1) { // 礼包对应一个门店显示的UI
       let shop = data.shops[0]
       this.changeGiftBtn(newGift, { shopId: shop.shopId, couponType: data.couponType, tokenFrom: data.tokenFrom, status: data.status })
     } else {
-      if (data.status === 0) {
+      if (data.status === 0) { // 已使用状态， 显示评论按钮
         this.changeGiftBtn(newGift, { status: data.status })
-      } else {
+      } else { // 礼包对应多个门店情况，按钮隐藏
         newGift.getChildByName('btn').active = false
       }
       data.shops.map((item: any) => {
@@ -187,10 +187,10 @@ export default class GiftPackAlert extends cc.Component {
         tokenFrom: customEventData.tokenFrom
       },
       callback: (res: any) => {
+        this.closeAlert()
         if (res.code === 0) {
           alert(JSON.stringify({ touchPos: 'ShopInfo', ...customEventData }))
         } else {
-          this.closeAlert()
           this.giftEmptyTips.getComponent('GiftEmptyTips').openTips()
         }
       }
@@ -206,6 +206,7 @@ export default class GiftPackAlert extends cc.Component {
       callback: (res: any) => {
         if (res.code === 0) {
           let giftArr = res.data.filter((item: any) => item.tokenFrom >= 101 && item.tokenFrom <= 125)
+          cc.log('gift pack: ', giftArr)
           if (giftArr.length > 0) {
             this.showEmptyTips(false)
             giftArr.map((item: any) => {
@@ -249,7 +250,7 @@ export default class GiftPackAlert extends cc.Component {
         couponType: shopItem.couponId,
         startTm: 1575730406599,
         endTm: 1575770406599,
-        status: 1, // 0：已使用， 1：未使用
+        status: 1,
         shops: shopItem.shop,
         productName: shopItem.productName,
         productImg: shopItem.productImg

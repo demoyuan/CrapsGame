@@ -14,6 +14,7 @@ export default class DocumentAlert extends cc.Component {
     let alertWidget = this.getComponent(cc.Widget)
     alertWidget.left = 0
     alertWidget.right = 0
+    alertWidget.updateAlignment()
 
     let graphics = this.box.getComponent(cc.Graphics)
     graphics.roundRect(-this.box.width / 2, -this.box.height / 2, this.box.width, this.box.height, 30)
