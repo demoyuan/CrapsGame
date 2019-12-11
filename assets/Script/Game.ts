@@ -111,7 +111,7 @@ export default class Game extends cc.Component {
    */
   public play() {
     let num = this.diceComp.onThrow()
-    if (num !== 0) {
+    if (num && num > 0) {
       // test
       // this.playSucFnc(num, 101)
 
@@ -123,10 +123,13 @@ export default class Game extends cc.Component {
       }
 
       this.tipsComp.showLoading({ status: true })
+      this.diceComp.buttonDisabled = true
+
       this.ajax.httpPost({
         url: '/user/game/playGame',
         callback: (res: any) => {
           this.tipsComp.showLoading({ status: false })
+          this.diceComp.buttonDisabled = false
           if (res.code === 0) {
             this.playSucFnc(num, res.data.rewardType)
           } else {
@@ -143,7 +146,7 @@ export default class Game extends cc.Component {
           }
         }
       })
-    } else {
+    } else if (num === 0) { // 次数为0 弹出获取次数提示
       this.timesAlertComp.openTips()
     }
   }
@@ -169,7 +172,11 @@ export default class Game extends cc.Component {
         cc.callFunc(() => {
           let { win, shopItem } = this.mapComp.checkWin(winType)
           win && this.winAlertComp.openTips(shopItem)
-          this.diceComp.buttonDisabled = false
+        }),
+        cc.callFunc(() => {
+          setTimeout(() => {
+            this.diceComp.buttonDisabled = false
+          }, 1000)
         })
       )
     )

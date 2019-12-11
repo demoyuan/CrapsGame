@@ -39,13 +39,15 @@ export default class Dice extends cc.Component {
   /**
    * 投掷方法
    */
-  public onThrow(): number {
+  public onThrow(): number | boolean {
     this.node.runAction(cc.sequence(
       cc.scaleTo(0.1, 0.92, 0.92),
       cc.scaleTo(0.1, 1, 1)
     ))
-    this.buttonDisabled = this.times === 0
-    return this.buttonDisabled ? 0 : 1
+    if (this.times === 0) { // 次数为0 返回0步数
+      return 0
+    }
+    return this.buttonDisabled ? null : 1
   }
 
   /**
