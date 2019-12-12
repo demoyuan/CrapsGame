@@ -7,7 +7,11 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
-  "platformSettings": {},
+  "platformSettings": {
+    "web": {
+      "formats": []
+    }
+  },
   "subMetas": {
     "tag_redeemed": {
       "ver": "1.0.4",

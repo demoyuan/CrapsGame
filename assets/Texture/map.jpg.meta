@@ -7,7 +7,16 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
-  "platformSettings": {},
+  "platformSettings": {
+    "web": {
+      "formats": [
+        {
+          "name": "jpg",
+          "quality": 80
+        }
+      ]
+    }
+  },
   "subMetas": {
     "map": {
       "ver": "1.0.4",
