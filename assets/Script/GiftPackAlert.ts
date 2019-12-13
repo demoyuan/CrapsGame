@@ -204,7 +204,9 @@ export default class GiftPackAlert extends cc.Component {
       url: '/user/coupon/allCoupons',
       callback: (res: any) => {
         if (res.code === 0) {
-          let giftArr = res.data.filter((item: any) => item.tokenFrom >= 101 && item.tokenFrom <= 125)
+          let giftArr = res.data
+            .filter((item: any) => item.tokenFrom >= 101 && item.tokenFrom <= 125)
+            .sort((a: any, b: any) => a.status > 0 && (b.createTm - a.createTm) )
           cc.log('gift pack: ', giftArr)
           if (giftArr.length > 0) {
             this.showEmptyTips(false)

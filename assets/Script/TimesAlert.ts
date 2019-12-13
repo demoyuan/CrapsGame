@@ -49,7 +49,7 @@ export default class TimesAlert extends cc.Component {
   }
 
   public openTips() {
-    this.commentLabel.string = `${this.getTimes}/3`
+    this.setGetTimesStr()
     this.node.active = true
     this.node.runAction(cc.sequence(
       cc.fadeIn(0.1),
@@ -58,6 +58,13 @@ export default class TimesAlert extends cc.Component {
         // this.box.runAction(cc.moveBy(0.4, cc.v2(0, this.box.height - 16)))
       })
     ))
+  }
+
+  /**
+   * 设置获得次数字符
+   */
+  public setGetTimesStr() {
+    this.commentLabel.string = `${this.getTimes}/3`
   }
 
   public closeTips() {

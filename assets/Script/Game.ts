@@ -88,6 +88,7 @@ export default class Game extends cc.Component {
           this.diceComp.times = res.data.amountChance
           this.timesAlertComp.firstLogin = res.data.daily === 1 ? true : false
           this.timesAlertComp.getTimes = res.data.redeemChance
+          this.timesAlertComp.setGetTimesStr()
           this.joinPeopleNum.string = `参与人次：${res.data.amountPlayers}`
         }
         this.initPlayerPos()
