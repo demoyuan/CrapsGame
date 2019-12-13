@@ -4,7 +4,6 @@ const { ccclass, property } = cc._decorator
 export default class Alert extends cc.Component {
   public box: cc.Node = null
   public fire: cc.Node = null
-  // public shopList: Array<object> | any = []
 
   protected onLoad() {
     this.box = this.node.getChildByName('Box')
@@ -12,10 +11,6 @@ export default class Alert extends cc.Component {
     this.init()
     let repeat = cc.repeatForever(cc.rotateBy(1.0, 90))
     this.fire.runAction(repeat)
-
-    // cc.loader.loadRes('shop', (err, jsonAsset) => {
-    //   this.shopList = jsonAsset.json
-    // })
   }
 
   public init() {
@@ -41,15 +36,7 @@ export default class Alert extends cc.Component {
     if (giftData.img) {
       cc.loader.load({ url: giftData.img, type: 'jpg' }, (err: any, texture: any) => {
         if (!err) {
-          let originImg = new cc.SpriteFrame(texture)
-          let imgSize = originImg.getOriginalSize()
           imgSprite.spriteFrame = new cc.SpriteFrame(texture)
-          imgSprite.spriteFrame.setRect(cc.rect(
-            imgSize.width / 2 - imgSprite.node.width / 2,
-            imgSize.height / 2 - imgSprite.node.height / 2,
-            imgSprite.node.width,
-            imgSprite.node.height
-          ))
         }
       })
     }

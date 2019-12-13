@@ -13,7 +13,6 @@
   "design-resolution-width": 960,
   "excluded-modules": [
     "Dynamic Atlas",
-    "Label Effect",
     "ParticleSystem",
     "TiledMap",
     "Spine Skeleton",

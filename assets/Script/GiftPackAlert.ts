@@ -23,7 +23,15 @@ export default class GiftPackAlert extends cc.Component {
 
   protected onLoad() {
     this.box = this.node.getChildByName('Box')
-    cc.loader.loadRes('shop', (err, jsonAsset) => {
+    let shopJson = ''
+    switch (window.location.host) {
+      case 'hk.whoot.com':
+        shopJson = 'shop'
+        break
+      default:
+        shopJson = 'shop-qc'
+    }
+    cc.loader.loadRes(shopJson, (err, jsonAsset) => {
       this.shopList = jsonAsset.json
     })
     this.init()
@@ -102,16 +110,7 @@ export default class GiftPackAlert extends cc.Component {
     // 加载远程图片
     cc.loader.load({ url, type: 'jpg' }, (err: any, texture: any) => {
       if (!err) {
-        let originImg = new cc.SpriteFrame(texture)
-        let imgSize = originImg.getOriginalSize()
         imgSprite.spriteFrame = new cc.SpriteFrame(texture)
-        // 居中裁剪
-        imgSprite.spriteFrame.setRect(cc.rect(
-          imgSize.width / 2 - imgSprite.node.width / 2,
-          imgSize.height / 2 - imgSprite.node.height / 2,
-          imgSprite.node.width,
-          imgSprite.node.height
-        ))
       }
     })
   }

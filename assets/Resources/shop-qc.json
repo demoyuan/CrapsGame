@@ -1,0 +1,72 @@
+[
+  {
+    "tokenFrom": 101,
+    "productName": "测试_大富翁獎品1",
+    "productImg": "https://hk-storage.whoot.com/fEMnDgL7uRVRb5Ve3QW-WQ==.jpg",
+    "couponId": 3,
+    "shop": [
+      {
+        "shopId": 30,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "shopImg": "https://hk-storage.whoot.com/pWLIYmFUomTjjGgYWjvGYA==.jpg"
+      }
+    ]
+  },
+  {
+    "tokenFrom": 102,
+    "productName": "测试_大富翁獎品2",
+    "productImg": "https://hk-storage.whoot.com/fEMnDgL7uRVRb5Ve3QW-WQ==.jpg",
+    "couponId": 2,
+    "shop": [
+      {
+        "shopId": 25,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "shopImg": "https://hk-storage.whoot.com/pWLIYmFUomTjjGgYWjvGYA==.jpg"
+      },
+      {
+        "shopId": 30,
+        "shopName": "兑换大赢家测试餐厅2号（迪吧被征用了）",
+        "shopImg": "https://hk-storage.whoot.com/pWLIYmFUomTjjGgYWjvGYA==.jpg"
+      }
+    ]
+  },
+  {
+    "tokenFrom": 103,
+    "productName": "测试_大富翁獎品3",
+    "productImg": "https://hk-storage.whoot.com/mAjz7qOMwweRQ_g8O_ZopA==.jpg",
+    "couponId": 1,
+    "shop": [
+      {
+        "shopId": 25,
+        "shopName": "兑换大赢家测试餐厅2号（迪吧被征用了）",
+        "shopImg": "https://hk-storage.whoot.com/pWLIYmFUomTjjGgYWjvGYA==.jpg"
+      }
+    ]
+  },
+  {
+    "tokenFrom": 105,
+    "productName": "测试_大富翁獎品5-1",
+    "productImg": "https://hk-storage.whoot.com/EXAvLIobqnjUJy4XMyMJow==.blob",
+    "couponId": 3,
+    "shop": [
+      {
+        "shopId": 25,
+        "shopName": "兑换大赢家测试餐厅2号（迪吧被征用了）",
+        "shopImg": "https://hk-storage.whoot.com/pWLIYmFUomTjjGgYWjvGYA==.jpg"
+      }
+    ]
+  },
+  {
+    "tokenFrom": 111,
+    "productName": "测试_大富翁獎品6-1",
+    "productImg": "https://hk-storage.whoot.com/3fsp9BcjSBNRd1VsLm2LEA==.jpeg",
+    "couponId": 1,
+    "shop": [
+      {
+        "shopId": 30,
+        "shopName": "兑换大赢家测试餐厅1号",
+        "shopImg": "https://hk-storage.whoot.com/pWLIYmFUomTjjGgYWjvGYA==.jpg"
+      }
+    ]
+  }
+]

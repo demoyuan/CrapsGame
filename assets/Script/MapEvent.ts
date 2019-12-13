@@ -41,7 +41,15 @@ export default class MapEvent extends cc.Component {
     this.scrollMap = this.node.getComponent(cc.ScrollView)
     this.mapLength = this.mapList.length
     this.playerComp = this.scrollMap.node.getComponentInChildren('Player')
-    cc.loader.loadRes('shop', (err, jsonAsset) => {
+    let shopJson = ''
+    switch (window.location.host) {
+      case 'hk.whoot.com':
+        shopJson = 'shop'
+        break
+      default:
+        shopJson = 'shop-qc'
+    }
+    cc.loader.loadRes(shopJson, (err, jsonAsset) => {
       this.shopList = jsonAsset.json
     })
   }

@@ -18,7 +18,7 @@ export default class Dice extends cc.Component {
   }
 
   protected update() {
-    this.timesLabel.string = `x${this.times}`
+    this.timesLabel.string = `x ${this.times}`
     // this.times === 0 ? this.disOnClick() : this.enOnClick()
   }
 
