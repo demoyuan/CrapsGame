@@ -2,6 +2,9 @@ const { ccclass, property } = cc._decorator
 
 @ccclass
 export default class ExpiresEnd extends cc.Component {
+  @property({ type: cc.Node, tooltip: '骰子' })
+  private dice: cc.Node = null
+
   private box: cc.Node = null
 
   protected onLoad() {
@@ -38,6 +41,7 @@ export default class ExpiresEnd extends cc.Component {
             let gameTime = res.data.BigWin
             let nowTime = new Date().getTime()
             if (gameTime.EndTm < nowTime) {
+              this.dice.getComponent('Dice').disOnClick()
               this.openTips()
             }
           }

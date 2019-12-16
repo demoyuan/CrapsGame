@@ -15068,6 +15068,9 @@
       "__id__": 339
     },
     "_enabled": true,
+    "dice": {
+      "__id__": 200
+    },
     "_id": "dcY9OCqsZB45QOmj1HDStb"
   },
   {
