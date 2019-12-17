@@ -31,6 +31,7 @@ export default class HttpRequest extends cc.Component {
     }
     let userData = JSON.parse(cc.sys.localStorage.getItem('userData'))
     xhr.setRequestHeader('whoot_token', userData.token)
+    xhr.setRequestHeader('client_version', 'v2.8.0')
     if (type === 'GET') {
       xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8')
       xhr.send()
