@@ -56,7 +56,8 @@ export default class GiftPackAlert extends cc.Component {
    * 创建新的gift节点
    */
   public newGiftItem(data: any) {
-    let newGift = cc.instantiate(this.giftItem)
+    let newGiftPrefab = cc.instantiate(this.giftItem)
+    let newGift = newGiftPrefab.getChildByName('box')
     this.changeGiftTime(newGift, { startTm: data.startTm, endTm: data.endTm })
     this.changeGiftImage(newGift, data.productImg)
     this.changeGiftShopName(newGift, data.productName)
@@ -72,10 +73,16 @@ export default class GiftPackAlert extends cc.Component {
         newGift.getChildByName('btn').active = false
       }
       data.shops.map((item: any) => {
-        this.newShopItem(newGift, { ...item, ...{ couponType: data.couponType, tokenFrom: data.tokenFrom, status: data.status } })
+        this.newShopItem(newGiftPrefab, { ...item, ...{ couponType: data.couponType, tokenFrom: data.tokenFrom, status: data.status } })
       })
     }
-    this.content.addChild(newGift)
+
+    let graphics = newGiftPrefab.getComponent(cc.Graphics)
+    graphics.clear(true)
+    graphics.roundRect(-newGiftPrefab.width / 2, -newGiftPrefab.height / 2, newGiftPrefab.width, newGiftPrefab.height, 14)
+    graphics.stroke()
+    graphics.fill()
+    this.content.addChild(newGiftPrefab)
   }
 
   /**
@@ -83,12 +90,12 @@ export default class GiftPackAlert extends cc.Component {
    */
   public newShopItem(giftItem: cc.Node, data: any) {
     let newShop = cc.instantiate(this.shopItem)
-    let shopItemLayout = giftItem.getChildByName('shopItemLayout')
+    let shopItemLayout = giftItem.getChildByName('box').getChildByName('shopItemLayout')
     shopItemLayout.addChild(newShop)
     shopItemLayout.getComponent(cc.Layout).updateLayout()
     let shopItemLayoutHeight = (newShop.height + 15)
     giftItem.height += shopItemLayoutHeight
-    giftItem.getChildByName('bg').height += shopItemLayoutHeight
+    // giftItem.getChildByName('bg').height += shopItemLayoutHeight
     this.changeGiftImage(newShop, data.shopImg)
     this.changeGiftShopName(newShop, data.shopName)
     if (data.status === 0) {
@@ -206,7 +213,7 @@ export default class GiftPackAlert extends cc.Component {
         if (res.code === 0) {
           let giftArr = res.data
             .filter((item: any) => item.tokenFrom >= 101 && item.tokenFrom <= 125)
-            .sort((a: any, b: any) => a.status > 0 && (b.createTm - a.createTm) )
+            .sort((a: any, b: any) => a.status > 0 && (b.createTm - a.createTm))
           cc.log('gift pack: ', giftArr)
           if (giftArr.length > 0) {
             this.showEmptyTips(false)
