@@ -31,7 +31,7 @@ export default class ExpiresEnd extends cc.Component {
    */
   public checkTime() {
     let xhr = cc.loader.getXMLHttpRequest()
-    xhr.open('GET', 'https://service.ingcreations.com/cfg/whoot/whootserv_dev', true)
+    xhr.open('GET', 'https://service.ingcreations.com/cfg/whoot/whootserv_release', true)
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         let response = xhr.responseText
