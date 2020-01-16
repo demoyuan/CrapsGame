@@ -195,7 +195,7 @@ export default class GiftPackAlert extends cc.Component {
       callback: (res: any) => {
         this.closeAlert()
         if (res.code === 0) {
-          alert(JSON.stringify({ touchPos: 'ShopInfo', ...customEventData }))
+          alert(JSON.stringify({ touchPos: 'ShopInfo', pageFrom: 'activityRichman', ...customEventData }))
         } else {
           this.giftEmptyTips.getComponent('GiftEmptyTips').openTips()
         }
